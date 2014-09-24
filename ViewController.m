@@ -7,6 +7,7 @@
 //
 
 #import "ViewController.h"
+#import "TextStatsViewController.h"
 
 @interface ViewController ()
 @property (weak, nonatomic) IBOutlet UITextView *body;
@@ -17,15 +18,28 @@
 
 @implementation ViewController
 
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
     NSMutableAttributedString *title = [[NSMutableAttributedString alloc] initWithString: self.outlineBtn.currentTitle];
     [title setAttributes:@{ NSStrokeWidthAttributeName : @3,
-                             NSStrokeColorAttributeName : self.outlineBtn.tintColor}
-                    range:NSMakeRange(0, [title length])];
+                            NSStrokeColorAttributeName : self.outlineBtn.tintColor}
+                   range:NSMakeRange(0, [title length])];
     [self.outlineBtn setAttributedTitle:title forState:UIControlStateNormal];
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+
+    if([segue.identifier isEqualToString:@"Analyze Text"])
+    {
+        if([segue.destinationViewController isKindOfClass:[TextStatsViewController class]]) {
+            TextStatsViewController *tsvc = (TextStatsViewController *)segue.destinationViewController;
+            tsvc.textToAnalyze = self.body.textStorage; 
+        }
+    }
 }
 
 - (void)viewDidAppear:(BOOL)animated
